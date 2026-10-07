@@ -11,8 +11,9 @@
 npm i @chakra-ui/react@2 @emotion/react @emotion/styled framer-motion
 <ChakraProvider> add into the main.tsx component
 
-# Routing installation
+## 4 Routing installation
 https://reactrouter.com/start/data/installation
+npm i react-router
 
 
 
