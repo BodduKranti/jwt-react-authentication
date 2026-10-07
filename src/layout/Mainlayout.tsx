@@ -19,6 +19,7 @@ const Mainlayout = () => {
                 <Box pos={"fixed"} top={0} left={0} w={"100vw"}>
                     <Navbar />
                 </Box>
+
                 <Outlet />
             </Box>
         </>

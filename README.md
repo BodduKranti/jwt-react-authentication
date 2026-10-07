@@ -15,6 +15,12 @@ npm i @chakra-ui/react@2 @emotion/react @emotion/styled framer-motion
 https://reactrouter.com/start/data/installation
 npm i react-router
 
+## 5 React Hook Form
+## npm install react-hook-form
+This library is used for form validation
+
+## 6 Axios Install
+npm install axios
 
 
 # React + TypeScript + Vite
