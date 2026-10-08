@@ -1,19 +1,74 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack } from "@chakra-ui/react"
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text, useToast, VStack } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
+import { useLogin } from "../../../services/auth/auth"
+import { Link as RouterLink, useNavigate } from "react-router"
+import { Link as Chakralink } from "@chakra-ui/react"
+import { useAuthstore } from "../../../store/authStore"
+import { useAppDispatch } from "../../../reduxStore/hook"
+import { setUser } from "../../../reduxStore/Reducer/authReducer"
 
 interface InputField {
     username: string,
     password: string
 }
 
+
 const Login = () => {
 
+    const dispatch = useAppDispatch()
+
+    //store the accesstoken and refreshtoken
+    const { setTokens } = useAuthstore();
+
+    const loginMethod = useLogin();
+    const toast = useToast();
     const { register, handleSubmit,
         formState: { errors }
     } = useForm<InputField>()
 
+    const navigate = useNavigate()
+
     const onSubmit = (formData: InputField) => {
         console.log('login Formdata', formData)
+        loginMethod.mutate(formData, {
+            onSuccess: ({ data }) => {
+
+
+
+                console.log('data', data)
+
+                dispatch(setUser({
+                    username: data?.user?.username,
+                    email: data?.user?.email,
+                    accessToken: data?.accessToken,
+                    refreshToken: data?.refreshToken
+                }))
+                setTokens({
+                    accessToken: data?.accessToken,
+                    refreshToken: data?.refreshToken,
+                    userinfo: data?.user
+                })
+
+                toast({
+                    title: "Login Successful",
+                    description: "You have successfully loggedin.",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
+                navigate('/product')
+            },
+            onError: (error: any) => {
+                console.error("Login failed:", error);
+                toast({
+                    title: "Login Failed",
+                    description: error.response?.data?.message || "An error occurred.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                });
+            }
+        })
     }
 
     return (
@@ -62,6 +117,19 @@ const Login = () => {
                     <Button colorScheme="cyan" color={"black"} type="submit" width="full">
                         Login
                     </Button>
+
+                    <Text fontSize={"sm"} color={"gray.600"}>
+                        You don't have an account?
+                        <Chakralink
+                            as={RouterLink}
+                            to="/register"
+                            color="cyan.400"
+                            fontWeight="bold"
+                            ml={1}
+                        >
+                            Register
+                        </Chakralink>
+                    </Text>
                 </VStack>
 
             </form>

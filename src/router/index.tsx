@@ -1,15 +1,16 @@
-import { createBrowserRouter } from "react-router";
-import App from "../App";
-import About from "../pages/about/About";
+import { createBrowserRouter, Navigate } from "react-router";
 import Register from "../pages/auth/register/Register";
 import Login from "../pages/auth/login/Login";
 import Mainlayout from "../layout/Mainlayout";
-import Product from "../pages/product/products";
+import Product from "../pages/product/Products";
+import Dashboard from "../pages/admin/dashboard/Dashboard";
+import PublicRoute from "../components/ProtectedRoute/PublicRoute";
+import PrivateRoute from "../components/ProtectedRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Mainlayout />,
+        element: <PublicRoute />,
         children: [
             {
                 path: "/register",
@@ -18,22 +19,25 @@ export const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <Login />,
-            },
+            }
         ]
     },
     {
-        path: "/product",
-        element: <Product />,
-    },
-    {
-        path: "/dashboard",
-        element: <About />,
-    },
-
+        path: "/",
+        element: <PrivateRoute />,
+        children: [
+            {
+                path: "/product",
+                element: <Product />,
+            },
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
+            },
+            {
+                path: "*",
+                element: <Navigate to="/dashboard" replace />,
+            }
+        ]
+    }
 ]);
-
-// const root: any = document.getElementById("root");
-
-// ReactDOM.createRoot(root).render(
-//     <RouterProvider router={router} />,
-// );

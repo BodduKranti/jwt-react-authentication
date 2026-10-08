@@ -1,8 +1,32 @@
 import { Box, Button, Container, Flex, HStack, Image, Text } from "@chakra-ui/react"
 import Logo from '../../assets/ecommerce-logo.svg'
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { useAuthstore } from "../../store/authStore"
+import { AxiosInstance } from "../../services/auth/AxiosInstance"
+import { useAppDispatch, useAppSelector } from "../../reduxStore/hook"
+import { logout } from "../../reduxStore/Reducer/authReducer"
 
 const Navbar = () => {
+
+    const dispatch = useAppDispatch()
+    const user = useAppSelector((state) => state?.auth)
+
+    const { accessToken, clearTokens } = useAuthstore()
+    const navigate = useNavigate()
+
+    const logoutNav = async () => {
+        try {
+            await AxiosInstance.post("/users/logout");
+            clearTokens();
+            dispatch(logout())
+            navigate("/login");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
+
+    console.log('user', user)
+
     return (
         <Box
             boxShadow="0 4px 10px rgba(0, 0, 0, 0.2)" // black shadow with opacity
@@ -58,6 +82,8 @@ const Navbar = () => {
                                 Dashboard
                             </Text>
                         </Link>
+
+                        {user?.username}
                     </Box>
 
                     <HStack
@@ -65,24 +91,41 @@ const Navbar = () => {
                         spacing={{ base: 2, md: 4 }}
                         mt={{ base: 2, md: 0 }}
                     >
-                        <Link to="/login">
-                            <Button
-                                colorScheme="cyan"
-                                color="black"
-                                size={{ base: "sm", md: "md" }}
-                            >
-                                Login
-                            </Button>
-                        </Link>
-                        <Link to="/register">
-                            <Button
-                                variant="outline"
-                                colorScheme="cyan"
-                                size={{ base: "sm", md: "md" }}
-                            >
-                                Register
-                            </Button>
-                        </Link>
+                        {
+                            !accessToken ?
+                                <>
+                                    <Link to="/login">
+                                        <Button
+                                            colorScheme="cyan"
+                                            color="black"
+                                            size={{ base: "sm", md: "md" }}
+                                        >
+                                            Login
+                                        </Button>
+                                    </Link>
+                                    <Link to="/register">
+                                        <Button
+                                            variant="outline"
+                                            colorScheme="cyan"
+                                            size={{ base: "sm", md: "md" }}
+                                        >
+                                            Register
+                                        </Button>
+                                    </Link>
+                                </>
+                                :
+                                (
+                                    <Button
+                                        colorScheme="cyan"
+                                        color="black"
+                                        size={{ base: "sm", md: "md" }}
+                                        onClick={logoutNav}
+                                    >
+                                        Logout
+                                    </Button>
+                                )
+                        }
+
                     </HStack>
                 </Flex>
             </Container>

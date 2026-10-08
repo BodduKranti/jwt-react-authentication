@@ -22,6 +22,20 @@ This library is used for form validation
 ## 6 Axios Install
 npm install axios
 
+## 7 Transtack React Query 
+npm i @tanstack/react-query
+
+## 8  ESLint Plugin Query
+npm i -D @tanstack/eslint-plugin-query
+It is recommended to also use our ESLint Plugin Query to help you catch bugs
+
+## 9 NPM
+npm install zustand
+
+## 10 redux toolkit with redux-persist
+npm install @reduxjs/toolkit react-redux redux-persist
+
+# Or, use any package manager of your choice.
 
 # React + TypeScript + Vite
 

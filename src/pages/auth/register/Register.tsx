@@ -11,10 +11,11 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 // import { useRegister } from "../services/auth/auth.js";
 import { useToast } from "@chakra-ui/react";
+import { useRegister } from "../../../services/auth/auth";
 
 interface InputField {
     username: string,
@@ -24,12 +25,15 @@ interface InputField {
 }
 
 const Register = () => {
+
+    const registerFun = useRegister();
+    const navigate = useNavigate()
     const toast = useToast();
     // const { mutateAsync: registerUser } = useRegister();
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<InputField>({
         defaultValues: {
             email: "",
@@ -39,27 +43,30 @@ const Register = () => {
         },
     });
 
-    const onSubmit = async (formData: InputField) => {
-        try {
-            console.log(' formData', formData)
-            // await registerUser(formData);
-            toast({
-                title: "Registration Successful",
-                description: "You have successfully registered.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-            });
-        } catch (error: any) {
-            console.error("Registration failed:", error);
-            toast({
-                title: "Registration Failed",
-                description: error.response?.data?.message || "An error occurred.",
-                status: "error",
-                duration: 2000,
-                isClosable: true,
-            });
-        }
+    const onSubmit = (formData: InputField) => {
+        console.log('formData', formData)
+        registerFun.mutate(formData, {
+            onSuccess: () => {
+                toast({
+                    title: "Registration Successful",
+                    description: "You have successfully registered.",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
+                navigate('/login')
+            },
+            onError: (error: any) => {
+                console.error("Registration failed:", error);
+                toast({
+                    title: "Registration Failed",
+                    description: error.response?.data?.message || "An error occurred.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                });
+            }
+        })
     };
 
     return (
