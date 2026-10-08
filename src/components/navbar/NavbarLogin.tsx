@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, HStack, Image, Text } from "@chakra-ui/react"
+import { Box, Button, Container, Flex, HStack, Image } from "@chakra-ui/react"
 import Logo from '../../assets/ecommerce-logo.svg'
 import { Link, useNavigate } from "react-router"
 import { useAuthstore } from "../../store/authStore"
@@ -20,7 +20,7 @@ const NavbarLogin = () => {
             await AxiosInstance.post("/users/logout");
             clearTokens();
             dispatch(logout())
-            await PersistStore.purge(); 
+            await PersistStore.purge();
             navigate("/login");
         } catch (error) {
             console.error("Logout failed:", error);

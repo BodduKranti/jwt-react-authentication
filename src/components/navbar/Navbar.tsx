@@ -2,7 +2,6 @@ import { Box, Button, Container, Flex, HStack, Image, Text } from "@chakra-ui/re
 import Logo from '../../assets/ecommerce-logo.svg'
 import { Link, useNavigate } from "react-router"
 import { useAuthstore } from "../../store/authStore"
-import { AxiosInstance } from "../../services/auth/AxiosInstance"
 import { useAppDispatch, useAppSelector } from "../../reduxStore/hook"
 import { logout } from "../../reduxStore/Reducer/authReducer"
 import { PersistStore } from "../../reduxStore/ReduxStore"

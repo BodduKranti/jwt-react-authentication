@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/react'
 import { useAppSelector } from '../../reduxStore/hook'
-import Navbar from '../navbar/Navbar'
 import { Navigate, Outlet } from 'react-router'
 import NavbarLogin from '../navbar/NavbarLogin'
 
