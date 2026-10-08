@@ -5,12 +5,18 @@ import Product from "../pages/product/Products";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
 import PublicRoute from "../components/ProtectedRoute/PublicRoute";
 import PrivateRoute from "../components/ProtectedRoute/PrivateRoute";
+import AdminBaseProtected from "../components/ProtectedRoute/AdminBaseProtected";
+import Home from "../pages/home/Home";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <PublicRoute />,
         children: [
+            {
+                path: '/',
+                element: <Home />
+            },
             {
                 path: "/register",
                 element: <Register />,
@@ -31,7 +37,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/dashboard",
-                element: <Dashboard />,
+                element:
+                    <AdminBaseProtected allowedRole={['ADMIN']}>
+                        <Dashboard />
+                    </AdminBaseProtected>
+                ,
             },
             {
                 path: "*",

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text, useToast, VStack } from "@chakra-ui/react"
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Stack, Text, useToast, VStack } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { useLogin } from "../../../services/auth/auth"
 import { Link as RouterLink, useNavigate } from "react-router"
@@ -6,6 +6,7 @@ import { Link as Chakralink } from "@chakra-ui/react"
 import { useAuthstore } from "../../../store/authStore"
 import { useAppDispatch } from "../../../reduxStore/hook"
 import { setUser } from "../../../reduxStore/Reducer/authReducer"
+import { useState } from "react"
 
 interface InputField {
     username: string,
@@ -14,6 +15,8 @@ interface InputField {
 
 
 const Login = () => {
+
+    const [loader, setLoader] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
 
@@ -29,17 +32,19 @@ const Login = () => {
     const navigate = useNavigate()
 
     const onSubmit = (formData: InputField) => {
+        setLoader(true)
         console.log('login Formdata', formData)
         loginMethod.mutate(formData, {
             onSuccess: ({ data }) => {
 
-
+                setLoader(false)
 
                 console.log('data', data)
 
                 dispatch(setUser({
                     username: data?.user?.username,
                     email: data?.user?.email,
+                    role: data?.user?.role,
                     accessToken: data?.accessToken,
                     refreshToken: data?.refreshToken
                 }))
@@ -59,6 +64,7 @@ const Login = () => {
                 navigate('/product')
             },
             onError: (error: any) => {
+                setLoader(false)
                 console.error("Login failed:", error);
                 toast({
                     title: "Login Failed",
@@ -115,7 +121,7 @@ const Login = () => {
                     </FormControl>
 
                     <Button colorScheme="cyan" color={"black"} type="submit" width="full">
-                        Login
+                        {loader ? <Spinner size="xs" /> : "Login"}
                     </Button>
 
                     <Text fontSize={"sm"} color={"gray.600"}>

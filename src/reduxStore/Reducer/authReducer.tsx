@@ -2,7 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 interface userinfo {
     username: string,
-    email: string
+    email: string,
+    role: string
 }
 
 interface details extends userinfo {
@@ -13,6 +14,7 @@ interface details extends userinfo {
 const initialState: details = {
     username: '',
     email: '',
+    role: '',
     accessToken: null,
     refreshToken: null
 };

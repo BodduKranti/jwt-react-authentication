@@ -7,6 +7,7 @@ import {
     Heading,
     Input,
     Select,
+    Spinner,
     Text,
     VStack,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import { useForm } from "react-hook-form";
 // import { useRegister } from "../services/auth/auth.js";
 import { useToast } from "@chakra-ui/react";
 import { useRegister } from "../../../services/auth/auth";
+import { useState } from "react";
 
 interface InputField {
     username: string,
@@ -25,7 +27,7 @@ interface InputField {
 }
 
 const Register = () => {
-
+    const [loader, setLoader] = useState<boolean>(false)
     const registerFun = useRegister();
     const navigate = useNavigate()
     const toast = useToast();
@@ -44,9 +46,11 @@ const Register = () => {
     });
 
     const onSubmit = (formData: InputField) => {
+        setLoader(true)
         console.log('formData', formData)
         registerFun.mutate(formData, {
             onSuccess: () => {
+                setLoader(false)
                 toast({
                     title: "Registration Successful",
                     description: "You have successfully registered.",
@@ -57,6 +61,7 @@ const Register = () => {
                 navigate('/login')
             },
             onError: (error: any) => {
+                setLoader(false)
                 console.error("Registration failed:", error);
                 toast({
                     title: "Registration Failed",
@@ -136,7 +141,7 @@ const Register = () => {
                         <FormErrorMessage>{errors?.role?.message}</FormErrorMessage>
                     </FormControl>
                     <Button colorScheme="cyan" color={"black"} type="submit" width="full">
-                        Register
+                        {loader ? <Spinner size="xs" /> : "Register"}
                     </Button>
                     <Text fontSize={"sm"} color={"gray.600"}>
                         Already have an account?
