@@ -48,6 +48,10 @@ export interface LoginResponse {
 }
 
 
+export interface refreshToken {
+    refreshToken: string
+}
+
 export const useRegister = () => {
     return useMutation<registerpayload, Error, registerpayload>({
         mutationFn: async (payload) => {
@@ -61,6 +65,16 @@ export const useLogin = () => {
     return useMutation<LoginResponse, Error, LoginPayload>({
         mutationFn: async (payload: LoginPayload) => {
             const response = await AxiosInstance.post(`/users/login`, payload);
+            return response?.data
+        }
+    })
+}
+
+
+export const useAuthRefresh = () => {
+    return useMutation<refreshToken, Error, refreshToken>({
+        mutationFn: async (refreshToken: refreshToken) => {
+            const response = await AxiosInstance.post(`/users/refresh-token`, refreshToken);
             return response?.data
         }
     })

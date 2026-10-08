@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useAppSelector } from '../../reduxStore/hook'
 import Navbar from '../navbar/Navbar'
 import { Navigate, Outlet } from 'react-router'
+import NavbarLogin from '../navbar/NavbarLogin'
 
 const PublicRoute = () => {
     const user = useAppSelector((state) => state?.auth)
@@ -26,7 +27,7 @@ const PublicRoute = () => {
             >
                 {/* NAvbar */}
                 <Box pos={"fixed"} top={0} left={0} w={"100vw"}>
-                    <Navbar />
+                    <NavbarLogin />
                 </Box>
 
                 <Outlet />

@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../reduxStore/hook"
 import { logout } from "../../reduxStore/Reducer/authReducer"
 import { PersistStore } from "../../reduxStore/ReduxStore"
 
-const Navbar = () => {
+const NavbarLogin = () => {
 
     const dispatch = useAppDispatch()
     const user = useAppSelector((state) => state?.auth)
@@ -17,9 +17,10 @@ const Navbar = () => {
 
     const logoutNav = async () => {
         try {
-            dispatch(logout());
-            clearTokens()
-            await PersistStore.purge();   // clears persist:root from localStorage
+            await AxiosInstance.post("/users/logout");
+            clearTokens();
+            dispatch(logout())
+            await PersistStore.purge(); 
             navigate("/login");
         } catch (error) {
             console.error("Logout failed:", error);
@@ -55,37 +56,6 @@ const Navbar = () => {
                             objectFit="contain"
                         />
                     </Link>
-
-
-                    {/* Product Catalog */}
-                    <Box
-                        display="flex"
-                        gap={{ base: 4, md: 10 }}
-                        mx={{ base: 2, md: 20 }}
-                        mt={{ base: 2, md: 0 }}
-                    >
-                        <Link to="/product">
-                            <Text
-                                fontSize={{ base: "md", md: "xl" }}
-                                _hover={{ color: "blue.300" }}
-                                color="gray.400"
-                            >
-                                Product Catalog
-                            </Text>
-                        </Link>
-
-                        <Link to="/dashboard">
-                            <Text
-                                fontSize={{ base: "md", md: "xl" }}
-                                _hover={{ color: "blue.300" }}
-                                color="gray.400"
-                            >
-                                Dashboard
-                            </Text>
-                        </Link>
-
-                        {user?.username}
-                    </Box>
 
                     <HStack
                         display={{ base: "none", md: "flex" }}
@@ -135,4 +105,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default NavbarLogin

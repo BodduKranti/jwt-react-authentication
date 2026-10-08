@@ -4,23 +4,8 @@ import UserReducer from './Reducer/authReducer';
 import { persistReducer } from "redux-persist";
 import { persistStore } from "redux-persist";
 
-
-// Type assertion to satisfy TypeScript
-const createNoopStorage = () => {
-    return {
-        getItem(_key: string) {
-            return Promise.resolve(null);
-        },
-        setItem(_key: string, _value: string) {
-            return Promise.resolve();
-        },
-        removeItem(_key: string) {
-            return Promise.resolve();
-        },
-    };
-};
-
 import _createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import { injectStore } from "../services/auth/AxiosInstance";
 const createWebStorage = (_createWebStorage as any).default ?? _createWebStorage;
 const storage = createWebStorage('local');
 
@@ -57,4 +42,6 @@ export type RootState = ReturnType<typeof MainReduxStore.getState>
 
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof MainReduxStore.dispatch
+
+injectStore(MainReduxStore)
 
